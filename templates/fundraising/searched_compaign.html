@@ -1,0 +1,49 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %} Projects {% endblock title %}
+{%block breadcrumb%}
+<div class="container">
+<nav aria-label="breadcrumb" class="main-breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'home'%}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Searched Compaigns</li>
+  </ol>
+</nav>
+</div>
+{%endblock%}
+
+{% block content %}
+
+<div class="py-5 mx-auto">
+
+  <div class="d-flex justify-content-center flex-wrap">
+    {%for searched_comp in searched_compaign %}
+    <div class="category-page-container col-md-3 mx-3 mt-5">
+      <div class="category-project-content p-4" style="border-radius: 10px; height:650px;">
+        <a href="{% url 'compaign_details' searched_comp.id%}">
+          <h3 class="my-3">{{ searched_comp.title|title }}</h3>
+          <div style="height:300px">
+            <img src="/media/{{searched_comp.image}}" alt="project-img" class="img-fluid rounded"
+              style="height: inherit; width: 100%;">
+
+          </div>
+        </a>
+        <div class="d-flex justify-content-between my-2">
+          <span><small><i class="fa fa-calendar mr-1 text-muted"></i><span class="text-muted mx-1">Ends
+                In:</span>{{ searched_comp.end_time }}</small></span>
+        </div>
+        <p class="text-secondary" style="height:80px;  word-wrap: break-word;">{{ searched_comp.details|truncatewords:20 }}</p>
+     
+        <a href="{% url 'compaign_details' searched_comp.id%}" class="btn btn-outline-secondary btn-sm">Read More</a>
+      </div>
+      <hr>
+
+    </div>
+
+    {%endfor%}
+  </div>
+
+  <!-- Extra Container For Tag Search Purposes -->
+{% endblock  %}
+
+

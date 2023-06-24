@@ -1,0 +1,111 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{%block breadcrumb%}
+<div class="container" >
+<nav aria-label="breadcrumb" class="main-breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'home'%}">Home</a></li>
+    <li class="breadcrumb-item "><a href="{%url 'profile' user.pk %}">User Profile</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Update User Profile</li>
+  </ol>
+</nav>
+</div>
+{%endblock%}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row justify-content-center align-items-center h-100">
+        <div class="col-12 col-lg-9 col-xl-7">
+          <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5"><p class="text-success"><b>Updates Details</b></p></h3>
+          <form method="Post" enctype='multipart/form-data'>
+              {% csrf_token %}
+              {% for msg in messages %}
+              <h4>{{ msg }}</h4>
+              {% endfor %} 
+              <div class="row">
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <label class="form-label" for="firstName"><b>First Name</b></label>
+                    <input type="text" id="firstName" name="first_name" value="{{current_user.user.first_name}}" class="form-control form-control-lg" />
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <label class="form-label" for="lastName"><b>Last Name</b> </label>
+                    <input type="text" id="lastName" name="last_name" value="{{current_user.user.last_name}}" class="form-control form-control-lg" />
+                  </div>
+
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div class="form-outline">
+                      <label class="form-label" for="username"><b>Email</b></label>
+                      <input type="email" id="email" name="email" value="{{current_user.user.email}}" class="form-control form-control-lg" />
+                    </div>
+                  </div>
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="user_name"><b>User Name</b></label>
+                        <input type="text" id="user_name" name="user_name" value="{{current_user.user.username}}" class="form-control form-control-lg" />
+                      </div>              
+                    </div>   
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="image"><b>Profile Image</b></label>
+                        <input type="file" accept="image/*" name="image" id="image"  class="form-control form-control-alternative">
+                      </div>
+                      </div>
+                      </div>
+                    <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="card-text placeholder-glow"for="birthdate"><b>Birth Date</b></label>
+                        <input type="text" id="birth_date" name="birth_date" value="{{current_user.birthdate|date:'Y-m-d' }}" placeholder="YY-MM-DD" class="form-control form-control-lg " />       
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="card-text placeholder-glow"for="birthdate"><b>Mobile</b></label>
+                        <input type="text" id="phone" name="phone" value="{{current_user.mobile}}" class="form-control form-control-lg " />
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="country"><b>Country</b></label>
+                        <input type="text" id="country" name="country" value="{{current_user.country}}" class="form-control form-control-lg" />
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="password"><b>FaceBook</b></label>
+                        <input type="text" id="fb_account" name="fb_account"value="{{current_user.fb_account}}"class="form-control form-control-lg" />                 
+                      </div>
+                    </div>
+                  </div>    
+                <div class="col-sm-12">
+                    <input class="btn btn-success btn  mb-8"   type="submit" value="Edit" />
+              </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock  %}

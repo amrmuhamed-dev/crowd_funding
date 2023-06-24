@@ -1,0 +1,241 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{%block breadcrumb%}
+<div class="container">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{%url 'home'%}">Home</a></li>
+    <li class="breadcrumb-item "><a href="{%url 'all_compaign'%}">All Projects</a></li>
+    <li class="breadcrumb-item active">Project Details</li>
+  </ol>
+</nav>
+</div>
+{%endblock%}
+{% block content %}
+<center><h1><b>{{compaign.title}}</b></h1></center>
+<center>Created by:<h3>{{compaign.creator.first_name}} {{compaign.creator.last_name}}</h3></center>
+
+<div class="container">
+<div id="carouselExampleIndicators" class="carousel slide w-100" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+    aria-current="true" aria-label="Slide 1"></button>
+    {%for i in counter %}  
+    <button type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide-to="{{ forloop.counter }}" aria-label="Slide {{ forloop.counter }}"></button>     
+    {%endfor%}
+  </div>
+
+  <div class="carousel-inner">
+    {%for img in image%}
+    {%if forloop.counter == 1 %}
+    <div class="carousel-item active" style="height:400px">
+      <img src="/media/{{img.image | safe}}" class="d-block w-100 h-100 rounded" alt="project-image">
+    </div>
+    {%else%}
+    <div class="carousel-item " style="height:400px">
+      <img src="/media/{{img.image | safe}}" class="d-block w-100 h-100 rounded" alt="project-image">
+    </div>
+    {%endif%}
+    {%endfor%}
+
+  </div>
+
+</div>
+
+
+
+
+  {% comment %} <div class="card-group">
+    {%for img in image%}
+    <div class="card">
+      <img src="/media/{{img.image | safe}}" class="img-fluid rounded"
+      style="height: inherit; width: 100%;">
+    </div>
+    {%endfor%}
+  </div>  {% endcomment %}
+
+
+
+  <div class="mb-3">
+    <p class="mb-0" style="color:black">      
+        {{compaign.details}}
+    </p>
+  </div>
+  <div class="row">
+    <div class="col-md-12 mt-3" style="padding-right: 0;">
+        <table class="table table-hover bg-white rounded shadow-lg p-0 text-center">
+            <thead>
+                <tr>
+                    <th class="px-5 py-3" scope="col">Total Target</th>
+                    <th class="px-5 py-3" scope="col">Start Time</th>
+                    <th class="px-5 py-3" scope="col">End Time</th>
+                    <th class="px-5 py-3" scope="col">Creation Date</th>
+                    <th class="px-5 py-3" scope="col">Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <td class="px-5 py-3">{{compaign.total_target}}</td>
+                        <td class="px-5 py-3">{{compaign.start_time}}</td>
+                        <td class="px-5 py-3">{{compaign.end_time}}</td>
+                        <td class="px-5 py-3">{{compaign.creation_date}}</td>
+                        <td class="px-5 py-3">{{category.category}}</td>
+                        <div class="row">
+                    </tr>
+            </tbody>
+        </table> 
+    </div>
+  
+  </div>
+    {% if compaign.creator != request.user%}
+    <form action="/report_compaign/{{compaign.id}}" method="POST" class="mx-3" enctype="multipart/form-data" >
+      {%csrf_token%}
+      <div class="row">
+          <div class="col-md-6 mb-4">
+                <select name='report' class="form-select form-select-sm text-danger" aria-label="Default select example">
+                  <option value="inappropriate">inappropriate</option>
+                  <option value="aggressive">aggressive</option>
+                  <option value="shameless">shameless</option>
+                </select>
+          </div>
+          <div class="col-md-6 mb-4">
+              <input type="submit" class="btn btn-danger btn-sm" value="Report">
+          </div>
+    </form>
+{%endif%}
+<br>
+<div>
+  
+  {% if compaign.creator == request.user%}
+  <a href="{%url 'update_campaign' compaign.pk%}"><button class="btn btn-success">Update Compaign</button></a>
+  <a href="{%url 'delete_campaign' compaign.pk%}"><button class="btn btn-danger">Delete Compaign</button></a>
+
+  {%endif%}
+
+
+{% comment %} -------------------------------------------------{% endcomment %}
+
+<!-- Modal -->
+
+
+<!-- Modal -->
+{% if compaign.creator != request.user%}
+<form action="/donate_compaign/{{compaign.pk}}" method="POST" class="mx-3" enctype="multipart/form-data" >
+{%csrf_token%}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Donate Compaign
+</button>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Amount Of Donate</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <input type="text" id="donate" name ="donate" class="form-control" />
+          
+      </div>
+      <div class="modal-footer">
+        <input type="submit" class="btn btn-primary " value="Donate" >
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+{%endif%}
+
+{% comment %} ---------------------------------------------- {% endcomment %}
+    <hr />
+        <h5 class="mt-5">Comments ({{comments|length }}) : </h5>
+              <ul class="list-unstyled mt-4">
+                {%for comment in comments%}
+                <li class="">
+                  <div class="comment d-flex">
+                    <div class="col-md-1">
+                      <img class="rounded-circle img-thumbnail" src="/media/{{comment.commentor.userprofile.picture}}" style="width: 60px;height:60px;"/>
+                    </div>
+                    <div class="col-md-8 mx-3">
+                     <h6 class="comment-header mb-0 d-flex">
+                      {{ comment.commentor.first_name}} {{comment.commentor.last_name}}              
+                      </h6>  
+                      <p class="comment-time">
+                        <small><small>{{comment.created_at }}</small></small>
+                      </p>
+                      <p class="comment-content">
+                        {{comment.comment}}
+                        {% if comment.commentor != request.user%}
+                        <form action="/report_comment/{{comment.id}}" method="POST" class="mx-3" enctype="multipart/form-data" >
+                          {%csrf_token%}
+                          <div class="row">
+                              <div class="col-md-6 mb-4">
+                                    <select name='report' class="form-select form-select-sm text-danger" aria-label="Default select example">
+                                      <option value="inappropriate">inappropriate</option>
+                                      <option value="aggressive">aggressive</option>
+                                      <option value="shameless">shameless</option>
+                                    </select>
+                              </div>
+                              <div class="col-md-6 mb-4">
+                                   <input type="submit" class="btn btn-danger btn-sm" value="Report">
+                               </div>
+                        </form>
+                        {%endif%}
+                      </p>
+                      <ul>
+                        {%for reply in replies%}
+                        {%if reply.comment_id == comment.id %}
+                        <li class=" mt-1">
+                          <div class="comment d-flex">
+                            <div class="col-md-1">
+                              <img class="rounded-circle img-thumbnail" src="/media/{{ reply.replier.userprofile.picture }}"  style="width: 40px;height:40px;" />
+                            </div>
+                            <div class="col-md-8 mx-3">
+                              <h6 class="comment-header mb-0">
+                                {{ reply.replier.first_name}} {{ reply.replier.last_name}}
+                              </h6>
+                              <p class="comment-time">
+                                <small><small>{{ reply.created_at }}</small></small>
+                              </p>
+                              <p class="comment-content">
+                                {{reply.reply}}
+                              </p>
+                            </div>
+                          </div>
+                        </li>
+                        {%else%}
+                        {%endif%}
+                        {%endfor%}
+                      </ul>
+
+                        <div>
+                        <form class="d-flex flex-column align-items-end" method="post" enctype="multipart/form-data"
+                        action="/reply_comment/">
+                        {% csrf_token %}
+                        <textarea id="rep" name="reply" rows="1" class="col-md-12 form-control"></textarea>
+                        <input id="divCheckbox2" type="hidden" name="commentpk" value={{comment.pk}}></input>
+                        <input id="divCheckbox3" type="hidden" name="compaignpk" value={{compaign.pk}}></input>
+                        <button type="submit" class="btn bg-gradient-light w-20 mt-2">
+                          Reply
+                        </button>
+                      </form>
+                    </div>
+
+                    </div>
+                  </div>
+                  <hr />
+                </li>
+                {%endfor%}
+              </ul>
+              <div>
+                <form class="d-flex flex-column align-items-end" method="post"
+                  action="/add_comment/{{compaign.pk}}">
+                  {% csrf_token %}
+                  <textarea id="" name="comment" rows="2" class="col-md-12 form-control"></textarea>
+                  <button type="submit" class="btn bg-gradient-light w-20 mt-2">
+                    Comment
+                  </button>
+                </form>
+              </div>
+{% endblock content %}
