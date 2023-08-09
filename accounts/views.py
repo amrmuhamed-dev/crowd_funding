@@ -26,17 +26,18 @@ def Useregister(request):
         first_name=request.POST['first_name']
         last_name=request.POST['last_name']
         email = request.POST['email']
-        phone = request.POST['phone']
-        # --------------------------very important----------------------#
-        profile_img = request.FILES['image']
+    email = request.POST['email']
+    phone = request.POST['phone']
+    # --------------------------very important----------------------#
+    profile_img = request.FILES['image']
 
-        # --------------------------very important----------------------#
-        user_name =request.POST['user_name']
-        birth_date= request.POST['birth_date']
-        country = request.POST['country']
-        fb_account = request.POST['fb_account']
-        password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
+    # --------------------------very important----------------------#
+    user_name =request.POST['user_name']
+    birth_date= request.POST['birth_date']
+    country = request.POST['country']
+    fb_account = request.POST['fb_account']
+    password = request.POST['password']
+    confirm_password = request.POST['confirm_password']
 
         if User.objects.filter(email=email).count() > 0:
             messages.error(request, "This email is already exists" )
@@ -57,16 +58,16 @@ def Useregister(request):
         
 
         if password == confirm_password:
-            user = User.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=user_name ,password=password,is_active=False)
-            user.save()
-            user_profile = Userprofile.objects.create(user=user,birthdate=birth_date,picture=profile_img,mobile=phone,country=country,fb_account=fb_account)
-            user_profile.save()
-            token = str(uuid.uuid4())
-            user_profile.email_activate_token = token
-            user_profile.save()
-            send_email_activate(user.email , token)
-            messages.success(request, 'A verification email is sent.')
-            return redirect('login')
+    user = User.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=user_name ,password=password,is_active=False)
+    user.save()
+    user_profile = Userprofile.objects.create(user=user,birthdate=birth_date,picture=profile_img,mobile=phone,country=country,fb_account=fb_account)
+    user_profile.save()
+    token = str(uuid.uuid4())
+    user_profile.email_activate_token = token
+    user_profile.save()
+    send_email_activate(user.email , token)
+    messages.success(request, 'A verification email is sent.')
+    return redirect('login')
         else:
             return redirect('register')
 
