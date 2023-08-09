@@ -27,6 +27,9 @@ def Useregister(request):
         last_name=request.POST['last_name']
         email = request.POST['email']
         phone = request.POST['phone']
+        if 'phone_number' not in request.POST or request.POST['phone_number'] is None:
+            messages.error(request, "Phone number is required.")
+            return render(request, 'accounts/register.html')
         phone_number = request.POST['phone_number']
         # --------------------------very important----------------------#
         profile_img = request.FILES['image']
@@ -142,6 +145,9 @@ def Profileupdate(request):
             picture=request.FILES['image']
             birthdate=request.POST['birth_date']
             mobile=request.POST['phone']
+            if 'phone_number' not in request.POST or request.POST['phone_number'] is None:
+                messages.error(request, "Phone number is required.")
+                return render(request, 'accounts/profileupdate.html',{'current_user':current_user})
             phone_number=request.POST['phone_number']
             country=request.POST['country']
             fb_account=request.POST['fb_account']
