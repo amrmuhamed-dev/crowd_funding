@@ -1,3 +1,4 @@
+import re
 from django.http import HttpResponse
 from django.shortcuts import  render, get_object_or_404, redirect
 from django.contrib.auth import authenticate,login
@@ -27,6 +28,10 @@ def Useregister(request):
         last_name=request.POST['last_name']
         email = request.POST['email']
         phone = request.POST['phone']
+        phone_pattern = re.compile(r'^\+?1?\d{9,15}$')
+        if not phone_pattern.match(phone):
+            messages.error(request, "Invalid phone number" )
+            return render(request,'accounts/register.html')
         # --------------------------very important----------------------#
         profile_img = request.FILES['image']
 
