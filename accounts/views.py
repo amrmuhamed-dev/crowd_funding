@@ -27,6 +27,7 @@ def Useregister(request):
         last_name=request.POST['last_name']
         email = request.POST['email']
         phone = request.POST['phone']
+        phone_number = request.POST['phone_number']
         # --------------------------very important----------------------#
         profile_img = request.FILES['image']
 
@@ -59,7 +60,7 @@ def Useregister(request):
         if password == confirm_password:
             user = User.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=user_name ,password=password,is_active=False)
             user.save()
-            user_profile = Userprofile.objects.create(user=user,birthdate=birth_date,picture=profile_img,mobile=phone,country=country,fb_account=fb_account)
+            user_profile = Userprofile.objects.create(user=user,birthdate=birth_date,picture=profile_img,mobile=phone,phone_number=phone_number,country=country,fb_account=fb_account)
             user_profile.save()
             token = str(uuid.uuid4())
             user_profile.email_activate_token = token
@@ -141,10 +142,11 @@ def Profileupdate(request):
             picture=request.FILES['image']
             birthdate=request.POST['birth_date']
             mobile=request.POST['phone']
+            phone_number=request.POST['phone_number']
             country=request.POST['country']
             fb_account=request.POST['fb_account']
             User.objects.filter(pk=user.id).update(first_name=first_name,last_name=last_name,username=username)
-            Userprofile.objects.filter(user=user.id).update(birthdate=birthdate,picture=picture,mobile=mobile,country=country,fb_account=fb_account)
+            Userprofile.objects.filter(user=user.id).update(birthdate=birthdate,picture=picture,mobile=mobile,phone_number=phone_number,country=country,fb_account=fb_account)
             return redirect('profile',user.id)
     return render(request, 'accounts/profileupdate.html',{'current_user':current_user})
 
